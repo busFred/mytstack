@@ -28,11 +28,37 @@ Some skills call others. Install the ones they need too:
 
 ## Install
 
+On Linux, run the installer. It clones this repo to `~/mytstack` if it can't
+find a clone under your home folder:
+
 ```bash
-git clone https://github.com/t3dotgg/tstack
-cp -R tstack/skills/* ~/.claude/skills/   # Claude Code
-cp -R tstack/skills/* ~/.codex/skills/    # Codex
+curl -fsSL https://raw.githubusercontent.com/busFred/mytstack/main/install-linux.sh | bash
+# or, from a clone:
+bash install-linux.sh
 ```
+
+It finds the agent tools on your machine and lets you pick which skills to
+install into which tools. Skills that others need are added for you. Each skill
+is a link to the clone, not a copy, so `git -C ~/mytstack pull` updates every
+tool at once. Run it again to add or remove skills. It never touches skills it
+didn't install.
+
+| Tool | Skills folder |
+|---|---|
+| Claude Code | `~/.claude/skills` |
+| Codex | `~/.codex/skills` |
+| Antigravity | `~/.gemini/config/skills` |
+| Gemini CLI | `~/.gemini/skills` |
+| Muse Code | `~/.config/muse/skills` |
+| Kimi Code CLI | `~/.kimi/skills` |
+| Kilo Code | `~/.kilo/skills` |
+| OpenCode | `~/.config/opencode/skills` |
+| Shared (optional) | `~/.agents/skills`, read by Codex, Gemini CLI, Kilo, OpenCode, Muse and Kimi |
+
+For scripts: `--yes`, `--all`, `--skills a,b`, `--tools claude,codex`,
+`--uninstall` and `--dry-run`. See `bash install-linux.sh --help`.
+
+Elsewhere, link or copy `skills/<name>` into your tool's skills folder.
 
 ## Requirements
 
