@@ -1,42 +1,46 @@
 ---
 name: council
-description: Trigger this if the user says 'council'.
+description: Runs a scored review panel of three models from three providers. Use only when the user says 'council'; never start it on your own.
 ---
 
 # Council
 
-Before an audit, address outstanding PR comments, fix known issues, and run
-relevant checks. Give council the updated implementation; do not defer known
-fixes until reviews return. If the user wants to discard the implementation
-and explore new ideas, skip fixes to code being replaced.
+First address outstanding PR comments, fix known issues, and run relevant
+checks, so the council gets the updated implementation; don't defer known
+fixes until reviews return. If the user is discarding the implementation to
+explore new ideas, skip fixes to code being replaced.
 
-Bring in three delegates to help with the user's request, usually for review
-or feedback. Use one strong model from each of three different providers, at
-high reasoning effort. If the user's instructions name council members, use
-those. Otherwise pick the latest flagship model from each provider, for
-example Claude Opus, GPT Sol, and Gemini Pro.
+## Members
 
-In T3 Code, use `orchestrator_capabilities` to resolve the models, then
-`delegate_task` to start one delegate per model in parallel. Elsewhere, use
-the harness's subagent tools. If you cannot reach three providers, or a named
-member is unavailable, report it instead of substituting.
+Three delegates (usually for review or feedback): one strong model from each
+of three different providers, high reasoning effort. Use members the user's
+instructions name; else each provider's latest flagship (e.g. Claude Opus,
+GPT Sol, Gemini Pro).
 
-Give each delegate the request and relevant context. For review or feedback,
-keep their work read-only. Collect their responses and summarize the useful
-findings, disagreements, and recommended next steps.
+- T3 Code: resolve models with `orchestrator_capabilities`, then one
+  `delegate_task` per model, in parallel. Elsewhere: the harness's subagent
+  tools.
+- Three providers unreachable, or a named member unavailable: report it,
+  don't substitute.
+- Give each the request and relevant context. Review or feedback stays
+  read-only.
 
-Do not wait idle. When a result arrives, check its findings against the code
-at once and decide what to fix while the other delegates run. Do not edit
-files while a delegate still reviews the same checkout. If the user's
-instructions mark a delegate as non-blocking, do not wait for it; treat a
-late result as feedback and do not record its score.
+## While they run
 
-For a code review, ask each delegate for a score out of 10.
-Count each full review pass as one round.
-A fresh review after fixes starts a new round.
+- Don't wait idle: check each result against the code on arrival and decide
+  fixes while the others run.
+- No file edits while a delegate still reviews the same checkout.
+- Delegate the user's instructions mark non-blocking: don't wait for it; a
+  late result is feedback, its score not recorded.
+- Summarize useful findings, disagreements, and recommended next steps.
 
-If the work ends in a pull request, put the results in the PR description.
-Put this section before the model and harness line at the end:
+## Scores and rounds
+
+Code review: each delegate scores out of 10. A full review pass is one round;
+a fresh review after fixes starts a new round.
+
+If the work ends in a pull request, add this section to the PR description,
+before the model and harness line at the end:
 
 ```markdown
 ## Council review
@@ -50,13 +54,11 @@ Rounds: 2
 | Gemini Pro | 7/10 | 9/10 |
 ```
 
-If a delegate gives no score, write `no score`. Do not invent one.
-If the PR is open, edit the description. Do not post a comment for this.
-If there is no PR, put the same results in the final reply only.
+- No score: write `no score`; never invent one.
+- Open PR: edit the description; no comment for this.
+- No PR: the same results in the final reply only.
 
-If you agree with their recommendations, make the changes and request a fresh
-review after. Continue this process until all delegates are satisfied with the
-outcome.
+## Iterate
 
-Do not let repeated reviews result in scope creep. It is your job to fight to
-keep scope limited.
+Make the changes you agree with, request a fresh review, repeat until all
+delegates are satisfied. Fight scope creep across rounds; keep scope limited.
