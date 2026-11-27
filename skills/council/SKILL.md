@@ -1,15 +1,16 @@
 ---
 name: council
-description: Runs a scored review panel of models from different providers (a full council of three, or a pair), or a read-only investigation of a root cause or a design choice. Use when the user says 'council', or when the user's instructions or another skill call for one; never start one otherwise.
+description: Runs a scored review by one reviewer, a pair from two providers, or a full council of three providers, or a read-only investigation of a root cause or a design choice. Use when the user says 'council', or when the user's instructions or another skill call for one; never start one otherwise.
 ---
 
 # Council
 
 Before a code review, address open PR comments, fix known issues and run the checks, so members see the current code (skip this for code being discarded).
 
-## Size: pair or full
+## Size: single, pair or full
 
 A council costs every member's usage on every round, so use the smallest that fits:
+- **Single:** one reviewer (the strongest Claude model unless named), one round, when the caller's rules say so; a second model from another provider only if the reviewer is unsure.
 - **Pair (default):** one Claude model and one model from another provider (e.g. GPT), one round. For tools, scripts, tests, docs, routine code, and every investigation.
 - **Full (three providers):** only when the user asks for a full council, names three or more members, or the caller's rules require it (e.g. code whose mistakes lose data, break security or change the product's core behaviour; a design, plan or public API).
 
